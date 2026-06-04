@@ -1,0 +1,15 @@
+{
+  "name": "Social Template Studio",
+  "short_name": "SocialStudio",
+  "description": "Create and download social media graphics for any platform",
+  "start_url": "/Social-Template-/",
+  "scope": "/Social-Template-/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F3E0FF",
+  "theme_color": "#702888",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

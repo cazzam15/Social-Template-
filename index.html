@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Social Template Studio</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#702888">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root {
   --l50: #FAF0FF; --l100: #F3E0FF; --l200: #E8C8F0; --l300: #D8A8E8;
@@ -666,6 +671,10 @@ initMobileLayout();
 resizeCvs();
 draw();
 window.addEventListener('resize', () => { initMobileLayout(); resizeCvs(); draw(); });
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 </body>
 </html>
