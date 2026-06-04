@@ -19,7 +19,19 @@
 body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, var(--l100), var(--l200)); min-height: 100vh; color: var(--text); overflow: hidden; }
 @media (max-width: 767px) { body { overflow-x: hidden; overflow-y: auto; padding-bottom: 60px; } }
 
-/* ── Header ── */
+/* Splash */
+#splash {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, var(--l700), var(--l500));
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  transition: opacity .4s ease;
+}
+#splash.hidden { opacity: 0; pointer-events: none; }
+#splash .sp-icon { font-size: 2.8rem; }
+#splash h2 { color: #fff; font-size: 1.35rem; font-weight: 700; }
+#splash p { color: rgba(255,255,255,.65); font-size: .84rem; }
+
+/* Header */
 header {
   height: 64px; background: linear-gradient(135deg, var(--l700), var(--l500));
   display: flex; align-items: center; padding: 0 28px; gap: 14px;
@@ -28,148 +40,108 @@ header {
 header h1 { color: #fff; font-size: 1.35rem; font-weight: 700; letter-spacing: -.3px; }
 header span { color: rgba(255,255,255,.7); font-size: .85rem; }
 
-/* ── Layout ── */
+/* Layout */
 .app { display: grid; grid-template-columns: 260px 1fr 310px; height: calc(100vh - 64px); }
 @media (max-width: 767px) { .app { display: block; height: auto; } }
 
-/* ── Left: Template picker ── */
-.tpl-bar {
-  background: #fff; border-right: 1.5px solid var(--l200);
-  overflow-y: auto; padding: 18px 14px;
-}
-.bar-heading {
-  font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
-  color: var(--l600); margin-bottom: 12px; padding-left: 2px;
-}
+/* Left */
+.tpl-bar { background: #fff; border-right: 1.5px solid var(--l200); overflow-y: auto; padding: 18px 14px; }
+.bar-heading { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--l600); margin-bottom: 12px; padding-left: 2px; }
 .tpl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-.tpl-card {
-  border: 2px solid var(--l200); border-radius: 12px; padding: 10px 7px 8px;
-  cursor: pointer; transition: all .18s; text-align: center; background: var(--l50);
-  user-select: none;
-}
+.tpl-card { border: 2px solid var(--l200); border-radius: 12px; padding: 10px 7px 8px; cursor: pointer; transition: all .18s; text-align: center; background: var(--l50); user-select: none; }
 .tpl-card:hover { border-color: var(--l400); transform: translateY(-2px); box-shadow: 0 5px 14px rgba(144,64,168,.15); }
 .tpl-card.active { border-color: var(--l600); background: var(--l100); }
-.tpl-thumb {
-  width: 100%; background: linear-gradient(135deg, var(--l300), var(--l500));
-  border-radius: 7px; margin-bottom: 6px; display: flex; align-items: center;
-  justify-content: center; font-size: 1.2rem; overflow: hidden;
-}
+.tpl-thumb { width: 100%; background: linear-gradient(135deg, var(--l300), var(--l500)); border-radius: 7px; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; overflow: hidden; }
 .tpl-label { font-size: .68rem; font-weight: 700; color: var(--mid); line-height: 1.3; }
 .tpl-dims { font-size: .59rem; color: var(--l500); margin-top: 2px; }
 
-/* ── Centre: Canvas ── */
-.canvas-area {
-  background: #dcc8ea; display: flex; align-items: center; justify-content: center;
-  padding: 28px; position: relative; overflow: hidden;
-}
-.canvas-wrap {
-  position: relative; box-shadow: 0 24px 64px rgba(0,0,0,.22), 0 4px 12px rgba(0,0,0,.1);
-  border-radius: 6px; line-height: 0;
-}
+/* Canvas */
+.canvas-area { background: #dcc8ea; display: flex; align-items: center; justify-content: center; padding: 28px; position: relative; overflow: hidden; }
+.canvas-wrap { position: relative; box-shadow: 0 24px 64px rgba(0,0,0,.22), 0 4px 12px rgba(0,0,0,.1); border-radius: 6px; line-height: 0; }
 #cvs { display: block; border-radius: 6px; }
 
-/* ── Right: Edit panel ── */
-.edit-panel {
-  background: #fff; border-left: 1.5px solid var(--l200);
-  overflow-y: auto; padding: 18px 16px;
-  display: flex; flex-direction: column; gap: 20px;
-}
-.ep-section {}
-.ep-title {
-  font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
-  color: var(--l600); padding-bottom: 8px; border-bottom: 1px solid var(--l100);
-  margin-bottom: 12px;
-}
+/* Edit panel */
+.edit-panel { background: #fff; border-left: 1.5px solid var(--l200); overflow-y: auto; padding: 18px 16px; display: flex; flex-direction: column; gap: 20px; }
+.ep-title { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--l600); padding-bottom: 8px; border-bottom: 1px solid var(--l100); margin-bottom: 12px; }
 .fg { margin-bottom: 10px; }
 label { display: block; font-size: .76rem; font-weight: 600; color: var(--mid); margin-bottom: 3px; }
-input[type=text], textarea, select {
-  width: 100%; padding: 7px 10px; border: 1.5px solid var(--l200); border-radius: 8px;
-  font-size: .82rem; color: var(--text); outline: none; transition: border-color .18s;
-  font-family: inherit; background: var(--l50);
-}
-input[type=text]:focus, textarea:focus, select:focus {
-  border-color: var(--l500); box-shadow: 0 0 0 3px rgba(176,96,200,.1);
-}
+input[type=text], textarea, select { width: 100%; padding: 7px 10px; border: 1.5px solid var(--l200); border-radius: 8px; font-size: .82rem; color: var(--text); outline: none; transition: border-color .18s; font-family: inherit; background: var(--l50); }
+input[type=text]:focus, textarea:focus, select:focus { border-color: var(--l500); box-shadow: 0 0 0 3px rgba(176,96,200,.1); }
 textarea { resize: vertical; min-height: 72px; }
-input[type=color] {
-  width: 34px; height: 34px; border: 2px solid var(--l200); border-radius: 8px;
-  padding: 2px; cursor: pointer; flex-shrink: 0;
-}
+input[type=color] { width: 34px; height: 34px; border: 2px solid var(--l200); border-radius: 8px; padding: 2px; cursor: pointer; flex-shrink: 0; }
 input[type=range] { width: 100%; accent-color: var(--l500); }
 .row-color { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .row-color label { margin-bottom: 0; flex: 1; }
 .presets { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
-.preset-swatch {
-  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
-  border: 2.5px solid transparent; transition: all .18s; flex-shrink: 0;
-}
+.preset-swatch { width: 30px; height: 30px; border-radius: 8px; cursor: pointer; border: 2.5px solid transparent; transition: all .18s; flex-shrink: 0; }
 .preset-swatch:hover, .preset-swatch.active { border-color: var(--l700); transform: scale(1.15); }
 .size-row { display: flex; align-items: center; gap: 8px; }
 .size-row input[type=number] { width: 58px; text-align: center; flex-shrink: 0; }
 .size-row .sl { flex: 1; }
 
+/* Upload */
+.btn-upload { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px; border: 1.5px dashed var(--l400); border-radius: 8px; font-size: .78rem; font-weight: 600; color: var(--l600); cursor: pointer; background: var(--l50); transition: all .18s; width: 100%; }
+.btn-upload:hover { background: var(--l100); border-color: var(--l600); }
+.img-preview { width: 100%; height: 56px; object-fit: cover; border-radius: 8px; margin-top: 6px; border: 1.5px solid var(--l200); display: none; }
+.img-preview.show { display: block; }
+.img-clear { font-size: .7rem; color: var(--l600); cursor: pointer; text-align: right; margin-top: 3px; display: none; }
+.img-clear.show { display: block; }
+
+/* Emoji */
+.emoji-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.emoji-btn { width: 34px; height: 34px; border: 1.5px solid var(--l200); border-radius: 8px; background: var(--l50); cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all .18s; flex-shrink: 0; }
+.emoji-btn:hover { border-color: var(--l500); transform: scale(1.15); }
+.emoji-btn.active { border-color: var(--l600); background: var(--l100); }
+
+/* Toggle row */
+.toggle-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.toggle-row label { margin: 0; flex: 1; cursor: pointer; }
+.toggle-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--l500); cursor: pointer; flex-shrink: 0; }
+
 /* Buttons */
-.btn {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  padding: 10px 16px; border: none; border-radius: 10px;
-  font-size: .85rem; font-weight: 600; cursor: pointer; transition: all .18s;
-  font-family: inherit; width: 100%;
-}
-.btn-dl {
-  background: linear-gradient(135deg, var(--l700), var(--l500)); color: #fff;
-  padding: 13px; font-size: .92rem; margin-bottom: 8px;
-}
+.btn { display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 16px; border: none; border-radius: 10px; font-size: .85rem; font-weight: 600; cursor: pointer; transition: all .18s; font-family: inherit; width: 100%; margin-bottom: 8px; }
+.btn-dl { background: linear-gradient(135deg, var(--l700), var(--l500)); color: #fff; padding: 13px; font-size: .92rem; }
 .btn-dl:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(144,64,168,.4); }
-.btn-sec {
-  background: var(--l100); color: var(--l700);
-  border: 1.5px solid var(--l300);
-}
+.btn-sec { background: var(--l100); color: var(--l700); border: 1.5px solid var(--l300); }
 .btn-sec:hover { background: var(--l200); }
+.btn-share { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; }
+.btn-share:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(37,211,102,.35); }
+
+/* Format row */
+.fmt-row { display: flex; gap: 8px; margin-bottom: 10px; }
+.fmt-btn { flex: 1; padding: 7px; border: 1.5px solid var(--l300); border-radius: 8px; font-size: .78rem; font-weight: 600; cursor: pointer; background: var(--l50); color: var(--mid); transition: all .18s; font-family: inherit; }
+.fmt-btn.active { background: var(--l600); color: #fff; border-color: var(--l600); }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--l300); border-radius: 10px; }
 
-/* ── Mobile panels ── */
+/* Mobile */
 .mobile-tabs { display: none; }
-
 @media (max-width: 767px) {
   .tpl-bar, .canvas-area, .edit-panel { display: none; }
   .tpl-bar.tab-active, .edit-panel.tab-active { display: block; height: auto; max-height: calc(100dvh - 124px); overflow-y: auto; }
   .canvas-area.tab-active { display: flex; min-height: 50vw; height: auto; padding: 16px; }
-
   .tpl-bar { border-right: none; border-bottom: 1.5px solid var(--l200); }
   .edit-panel { border-left: none; }
   .tpl-grid { grid-template-columns: repeat(3, 1fr); }
-
   header h1 { font-size: 1.05rem; }
   header span { display: none; }
   header { padding: 0 16px; gap: 10px; }
-
-  .mobile-tabs {
-    display: flex;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 60px;
-    background: #fff;
-    border-top: 1.5px solid var(--l200);
-    box-shadow: 0 -4px 14px rgba(0,0,0,.08);
-    z-index: 300;
-  }
-  .mobile-tab {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 3px; cursor: pointer; color: var(--mid);
-    font-size: .64rem; font-weight: 600;
-    background: none; border: none; font-family: inherit;
-    padding: 6px 0 8px; transition: color .15s; user-select: none;
-  }
+  .mobile-tabs { display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: #fff; border-top: 1.5px solid var(--l200); box-shadow: 0 -4px 14px rgba(0,0,0,.08); z-index: 300; }
+  .mobile-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; color: var(--mid); font-size: .64rem; font-weight: 600; background: none; border: none; font-family: inherit; padding: 6px 0 8px; transition: color .15s; user-select: none; }
   .mobile-tab .ti { font-size: 1.25rem; line-height: 1; }
   .mobile-tab.active { color: var(--l600); }
 }
 </style>
 </head>
 <body>
+
+<div id="splash">
+  <div class="sp-icon">&#10024;</div>
+  <h2>Social Template Studio</h2>
+  <p>Loading your workspace&hellip;</p>
+</div>
 
 <header>
   <h1>&#10024; Social Template Studio</h1>
@@ -178,30 +150,37 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
 
 <div class="app">
 
-  <!-- Template picker -->
   <div class="tpl-bar">
     <div class="bar-heading">Format</div>
     <div class="tpl-grid" id="tplGrid"></div>
   </div>
 
-  <!-- Canvas -->
   <div class="canvas-area">
     <div class="canvas-wrap"><canvas id="cvs"></canvas></div>
   </div>
 
-  <!-- Edit panel -->
   <div class="edit-panel">
 
     <div class="ep-section">
       <div class="ep-title">Content</div>
-      <div class="fg"><label>Headline</label>
-        <input type="text" id="headline" value="Your Amazing Headline"></div>
-      <div class="fg"><label>Body / Caption</label>
-        <textarea id="body">Add your description or call to action here.</textarea></div>
-      <div class="fg"><label>Handle / Tag</label>
-        <input type="text" id="handle" value="@yourbrand"></div>
-      <div class="fg"><label>Button Text</label>
-        <input type="text" id="cta" value="Learn More"></div>
+      <div class="fg"><label>Headline</label><input type="text" id="headline" value="Your Amazing Headline"></div>
+      <div class="fg"><label>Body / Caption</label><textarea id="body">Add your description or call to action here.</textarea></div>
+      <div class="fg"><label>Handle / Tag</label><input type="text" id="handle" value="@yourbrand"></div>
+      <div class="fg"><label>Button Text</label><input type="text" id="cta" value="Learn More"></div>
+      <div class="fg">
+        <label>Emoji Sticker</label>
+        <div class="emoji-grid" id="emojiGrid"></div>
+        <div style="margin-top:8px"><label>Position</label>
+          <select id="emojiPos">
+            <option value="none">None</option>
+            <option value="top-left">Top Left</option>
+            <option value="top-right">Top Right</option>
+            <option value="center">Center</option>
+            <option value="bottom-left">Bottom Left</option>
+            <option value="bottom-right">Bottom Right</option>
+          </select>
+        </div>
+      </div>
     </div>
 
     <div class="ep-section">
@@ -212,13 +191,40 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
           <option value="radial">Radial Glow</option>
           <option value="solid">Solid</option>
           <option value="mesh">Mesh</option>
+          <option value="stripes">Diagonal Stripes</option>
+          <option value="noise">Grain / Noise</option>
+          <option value="image">Photo</option>
         </select>
       </div>
-      <div class="fg"><label>Presets</label>
-        <div class="presets" id="presets"></div>
-      </div>
+      <div class="fg"><label>Presets</label><div class="presets" id="presets"></div></div>
       <div class="row-color"><label>Color A</label><input type="color" id="c1" value="#C483D8"></div>
       <div class="row-color"><label>Color B</label><input type="color" id="c2" value="#9040A8"></div>
+      <div class="fg">
+        <label>Background Photo</label>
+        <label class="btn-upload" for="bgImageInput">&#128247; Upload Image</label>
+        <input type="file" id="bgImageInput" accept="image/*" style="display:none">
+        <img id="bgPreview" class="img-preview" alt="">
+        <div id="bgClear" class="img-clear">&#10005; Remove image</div>
+      </div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-title">Logo / Overlay</div>
+      <div class="fg">
+        <label class="btn-upload" for="logoInput">&#128247; Upload Logo</label>
+        <input type="file" id="logoInput" accept="image/*" style="display:none">
+        <img id="logoPreview" class="img-preview" alt="">
+        <div id="logoClear" class="img-clear">&#10005; Remove logo</div>
+      </div>
+      <div class="fg"><label>Position</label>
+        <select id="logoPos">
+          <option value="top-right">Top Right</option>
+          <option value="top-left">Top Left</option>
+          <option value="bottom-right">Bottom Right</option>
+          <option value="bottom-left">Bottom Left</option>
+        </select>
+      </div>
+      <div class="fg"><label>Size (%)</label><input type="range" id="logoSize" min="5" max="40" value="20"></div>
     </div>
 
     <div class="ep-section">
@@ -241,6 +247,8 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
       </div>
       <div class="row-color"><label>Text Color</label><input type="color" id="tColor" value="#FFFFFF"></div>
       <div class="row-color"><label>Accent Color</label><input type="color" id="aColor" value="#FFD700"></div>
+      <div class="toggle-row"><input type="checkbox" id="textShadow" checked><label for="textShadow">Text shadow</label></div>
+      <div class="toggle-row"><input type="checkbox" id="textOutline"><label for="textOutline">Text outline</label></div>
     </div>
 
     <div class="ep-section">
@@ -252,38 +260,34 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
           <option value="right">Right</option>
         </select>
       </div>
-      <div class="fg"><label>Overlay Opacity (%)</label>
-        <input type="range" id="overlayOpacity" min="0" max="60" value="15">
-      </div>
-      <div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-        <input type="checkbox" id="showBadge" checked style="width:16px;height:16px;accent-color:var(--l500);cursor:pointer;flex-shrink:0;">
-        <label for="showBadge" style="margin:0;cursor:pointer;">Show platform label on image</label>
-      </div>
+      <div class="fg"><label>Overlay Opacity (%)</label><input type="range" id="overlayOpacity" min="0" max="60" value="15"></div>
+      <div class="toggle-row" style="margin-top:4px"><input type="checkbox" id="showBadge" checked><label for="showBadge">Show platform label on image</label></div>
     </div>
 
     <div class="ep-section">
       <div class="ep-title">Export</div>
-      <button class="btn btn-dl" id="dlBtn">&#8659; Download Full-Size PNG</button>
-      <button class="btn btn-sec" id="copyBtn">Copy Style to Clipboard (JSON)</button>
+      <div class="fg"><label>Format</label>
+        <div class="fmt-row">
+          <button class="fmt-btn active" data-fmt="png">PNG</button>
+          <button class="fmt-btn" data-fmt="jpeg">JPEG</button>
+        </div>
+      </div>
+      <button class="btn btn-dl" id="dlBtn">&#8659; Download Full-Size</button>
+      <button class="btn btn-sec" id="copyImgBtn">&#128203; Copy Image</button>
+      <button class="btn btn-share" id="shareBtn" style="display:none">&#8679; Share</button>
+      <button class="btn btn-sec" id="copyBtn">&#9998; Copy Style (JSON)</button>
     </div>
 
   </div>
 </div>
 
 <nav class="mobile-tabs" id="mobileTabs" aria-label="Sections">
-  <button class="mobile-tab active" data-panel="tpl-bar">
-    <span class="ti">&#9783;</span><span>Format</span>
-  </button>
-  <button class="mobile-tab" data-panel="canvas-area">
-    <span class="ti">&#9673;</span><span>Preview</span>
-  </button>
-  <button class="mobile-tab" data-panel="edit-panel">
-    <span class="ti">&#9998;</span><span>Edit</span>
-  </button>
+  <button class="mobile-tab active" data-panel="tpl-bar"><span class="ti">&#9783;</span><span>Format</span></button>
+  <button class="mobile-tab" data-panel="canvas-area"><span class="ti">&#9673;</span><span>Preview</span></button>
+  <button class="mobile-tab" data-panel="edit-panel"><span class="ti">&#9998;</span><span>Edit</span></button>
 </nav>
 
 <script>
-// ── Templates ──────────────────────────────────────────────────
 const TEMPLATES = [
   { id:'ig_sq',    label:'Instagram',   platform:'Instagram', w:1080, h:1080, icon:'📷', ar:'1/1' },
   { id:'ig_story', label:'Story',       platform:'Instagram', w:1080, h:1920, icon:'📱', ar:'9/16' },
@@ -296,31 +300,31 @@ const TEMPLATES = [
 ];
 
 const PRESETS = [
-  ['#C483D8','#9040A8'], ['#FF6B9D','#C044A8'], ['#4158D0','#C850C0'],
-  ['#0093E9','#80D0C7'], ['#FF9A9E','#FECFEF'], ['#A18CD1','#FBC2EB'],
-  ['#E8D5F0','#B070C0'], ['#2D1B4E','#0D0D2B'], ['#F8C8C8','#E870A0'],
+  ['#C483D8','#9040A8'],['#FF6B9D','#C044A8'],['#4158D0','#C850C0'],
+  ['#0093E9','#80D0C7'],['#FF9A9E','#FECFEF'],['#A18CD1','#FBC2EB'],
+  ['#E8D5F0','#B070C0'],['#2D1B4E','#0D0D2B'],['#F8C8C8','#E870A0'],
   ['#FFD700','#FF8C00'],
 ];
 
+const EMOJIS = ['🔥','⭐','💥','🎯','🚀','💫','✨','🌟','💎','🎉','❤️','👑'];
+
 let cur = TEMPLATES[0];
+let exportFmt = 'png';
+let bgImageEl = null, bgImageData = '';
+let logoEl = null, logoData = '';
+let selectedEmoji = '';
+
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
 
-// ── Build template cards ───────────────────────────────────────
+// Template cards
 const grid = document.getElementById('tplGrid');
 TEMPLATES.forEach(t => {
   const card = document.createElement('div');
   card.className = 'tpl-card' + (t.id === cur.id ? ' active' : '');
-  // Aspect ratio thumb using padding-top trick
   const [aw, ah] = t.ar.split('/').map(Number);
   const pct = (ah / aw * 100).toFixed(1);
-  card.innerHTML = `
-    <div class="tpl-thumb" style="padding-top:${Math.min(pct,130)}%">
-      <span style="position:absolute;font-size:1.3rem">${t.icon}</span>
-    </div>
-    <div class="tpl-label">${t.label}</div>
-    <div class="tpl-dims">${t.w}&times;${t.h}</div>`;
-  card.querySelector('.tpl-thumb').style.position = 'relative';
+  card.innerHTML = `<div class="tpl-thumb" style="padding-top:${Math.min(pct,130)}%;position:relative"><span style="position:absolute;font-size:1.3rem">${t.icon}</span></div><div class="tpl-label">${t.label}</div><div class="tpl-dims">${t.w}&times;${t.h}</div>`;
   let touchMoved = false;
   card.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
   card.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
@@ -328,15 +332,13 @@ TEMPLATES.forEach(t => {
     if (touchMoved) return;
     document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('active'));
     card.classList.add('active');
-    cur = t;
-    resizeCvs();
-    draw();
+    cur = t; resizeCvs(); draw();
     if (isMobile()) applyActiveTab('canvas-area');
   });
   grid.appendChild(card);
 });
 
-// ── Build preset swatches ──────────────────────────────────────
+// Presets
 const presetsEl = document.getElementById('presets');
 PRESETS.forEach(([a, b], i) => {
   const el = document.createElement('div');
@@ -347,26 +349,107 @@ PRESETS.forEach(([a, b], i) => {
     el.classList.add('active');
     document.getElementById('c1').value = a;
     document.getElementById('c2').value = b;
-    draw();
+    draw(); saveDesign();
   });
   presetsEl.appendChild(el);
 });
 
-// ── Sync slider ↔ number ───────────────────────────────────────
+// Emoji grid
+const emojiGrid = document.getElementById('emojiGrid');
+EMOJIS.forEach(em => {
+  const btn = document.createElement('button');
+  btn.className = 'emoji-btn';
+  btn.textContent = em;
+  btn.addEventListener('click', () => {
+    if (selectedEmoji === em) {
+      selectedEmoji = '';
+      btn.classList.remove('active');
+      document.getElementById('emojiPos').value = 'none';
+    } else {
+      selectedEmoji = em;
+      document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (document.getElementById('emojiPos').value === 'none') document.getElementById('emojiPos').value = 'top-right';
+    }
+    draw(); saveDesign();
+  });
+  emojiGrid.appendChild(btn);
+});
+
+// Slider sync
 const hSize = document.getElementById('hSize');
 const hSlider = document.getElementById('hSlider');
-hSize.addEventListener('input', () => { hSlider.value = hSize.value; draw(); });
-hSlider.addEventListener('input', () => { hSize.value = hSlider.value; draw(); });
+hSize.addEventListener('input', () => { hSlider.value = hSize.value; draw(); saveDesign(); });
+hSlider.addEventListener('input', () => { hSize.value = hSlider.value; draw(); saveDesign(); });
 
-// ── Wire all inputs ────────────────────────────────────────────
-['headline','body','handle','cta','bgStyle','c1','c2','font','tColor','aColor','align','overlayOpacity','showBadge']
-  .forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener('input', draw);
-    el.addEventListener('change', draw);
+// Format buttons
+document.querySelectorAll('.fmt-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    exportFmt = btn.dataset.fmt;
+    saveDesign();
   });
+});
 
-// ── Canvas sizing ──────────────────────────────────────────────
+// Wire inputs
+['headline','body','handle','cta','bgStyle','c1','c2','font','tColor','aColor','align',
+ 'overlayOpacity','showBadge','textShadow','textOutline','logoPos','logoSize','emojiPos']
+.forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => { draw(); saveDesign(); });
+  el.addEventListener('change', () => { draw(); saveDesign(); });
+});
+
+// Background image
+document.getElementById('bgImageInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    bgImageData = ev.target.result;
+    bgImageEl = new Image();
+    bgImageEl.onload = () => { draw(); saveDesign(); };
+    bgImageEl.src = bgImageData;
+    document.getElementById('bgPreview').src = bgImageData;
+    document.getElementById('bgPreview').classList.add('show');
+    document.getElementById('bgClear').classList.add('show');
+    document.getElementById('bgStyle').value = 'image';
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('bgClear').addEventListener('click', () => {
+  bgImageEl = null; bgImageData = '';
+  document.getElementById('bgPreview').classList.remove('show');
+  document.getElementById('bgClear').classList.remove('show');
+  document.getElementById('bgImageInput').value = '';
+  document.getElementById('bgStyle').value = 'gradient';
+  draw(); saveDesign();
+});
+
+// Logo
+document.getElementById('logoInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    logoData = ev.target.result;
+    logoEl = new Image();
+    logoEl.onload = () => { draw(); saveDesign(); };
+    logoEl.src = logoData;
+    document.getElementById('logoPreview').src = logoData;
+    document.getElementById('logoPreview').classList.add('show');
+    document.getElementById('logoClear').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('logoClear').addEventListener('click', () => {
+  logoEl = null; logoData = '';
+  document.getElementById('logoPreview').classList.remove('show');
+  document.getElementById('logoClear').classList.remove('show');
+  document.getElementById('logoInput').value = '';
+  draw(); saveDesign();
+});
+
+// Canvas sizing
 function resizeCvs() {
   const mobile = window.innerWidth < 768;
   const maxW = mobile ? window.innerWidth - 32 : window.innerWidth - 260 - 310 - 64;
@@ -376,7 +459,7 @@ function resizeCvs() {
   cvs.height = Math.floor(cur.h * sc);
 }
 
-// ── Read all values ────────────────────────────────────────────
+// Read values
 function vals() {
   return {
     headline: document.getElementById('headline').value,
@@ -392,152 +475,160 @@ function vals() {
     aColor:   document.getElementById('aColor').value,
     align:    document.getElementById('align').value,
     overlayOpacity: parseInt(document.getElementById('overlayOpacity').value) / 100,
-    showBadge: document.getElementById('showBadge').checked,
+    showBadge:   document.getElementById('showBadge').checked,
+    textShadow:  document.getElementById('textShadow').checked,
+    textOutline: document.getElementById('textOutline').checked,
+    logoPos:  document.getElementById('logoPos').value,
+    logoSize: parseInt(document.getElementById('logoSize').value) / 100,
+    emojiPos: document.getElementById('emojiPos').value,
   };
 }
 
-// ── Master render function ─────────────────────────────────────
-// Draws everything into targetCtx at native tplW × tplH (uses ctx.scale internally)
+// Noise texture
+function makeNoise(W, H) {
+  const nc = document.createElement('canvas');
+  nc.width = Math.min(W, 400); nc.height = Math.min(H, 400);
+  const nctx = nc.getContext('2d');
+  const id = nctx.createImageData(nc.width, nc.height);
+  for (let i = 0; i < id.data.length; i += 4) {
+    const v = Math.random() * 255 | 0;
+    id.data[i] = v; id.data[i+1] = v; id.data[i+2] = v; id.data[i+3] = 20;
+  }
+  nctx.putImageData(id, 0, 0);
+  return nc;
+}
+
+// Render
 function render(targetCtx, tplW, tplH, v) {
   targetCtx.clearRect(0, 0, tplW, tplH);
-  const W = tplW, H = tplH;
-  const portrait = H > W;
+  const W = tplW, H = tplH, portrait = H > W;
 
-  // ─ Background ─
-  let bg;
-  if (v.bgStyle === 'gradient') {
-    bg = targetCtx.createLinearGradient(0, 0, W, H);
-  } else if (v.bgStyle === 'radial') {
-    bg = targetCtx.createRadialGradient(W*.5, H*.45, 0, W*.5, H*.45, Math.max(W,H)*.72);
-  } else if (v.bgStyle === 'mesh') {
-    bg = targetCtx.createLinearGradient(0, 0, W, H);
+  // Background
+  if (v.bgStyle === 'image' && bgImageEl) {
+    const ir = bgImageEl.width / bgImageEl.height, cr = W / H;
+    let sw, sh, sx, sy;
+    if (ir > cr) { sh = bgImageEl.height; sw = sh * cr; sx = (bgImageEl.width - sw) / 2; sy = 0; }
+    else { sw = bgImageEl.width; sh = sw / cr; sx = 0; sy = (bgImageEl.height - sh) / 2; }
+    targetCtx.drawImage(bgImageEl, sx, sy, sw, sh, 0, 0, W, H);
+    const tint = targetCtx.createLinearGradient(0, 0, W, H);
+    tint.addColorStop(0, v.c1 + '99'); tint.addColorStop(1, v.c2 + '99');
+    targetCtx.fillStyle = tint; targetCtx.fillRect(0, 0, W, H);
   } else {
-    bg = null; // solid
+    let bg;
+    if (v.bgStyle === 'gradient' || v.bgStyle === 'stripes' || v.bgStyle === 'noise') bg = targetCtx.createLinearGradient(0, 0, W, H);
+    else if (v.bgStyle === 'radial') bg = targetCtx.createRadialGradient(W*.5, H*.45, 0, W*.5, H*.45, Math.max(W,H)*.72);
+    else if (v.bgStyle === 'mesh') bg = targetCtx.createLinearGradient(0, 0, W, H);
+    else bg = null;
+    if (bg) { bg.addColorStop(0, v.c1); bg.addColorStop(1, v.c2); }
+    targetCtx.fillStyle = bg || v.c1;
+    targetCtx.fillRect(0, 0, W, H);
+
+    if (v.bgStyle === 'mesh') {
+      const bg2 = targetCtx.createRadialGradient(W*.8, H*.2, 0, W*.8, H*.2, W*.6);
+      bg2.addColorStop(0, v.c2 + '88'); bg2.addColorStop(1, 'transparent');
+      targetCtx.fillStyle = bg2; targetCtx.fillRect(0, 0, W, H);
+      const bg3 = targetCtx.createRadialGradient(W*.2, H*.8, 0, W*.2, H*.8, W*.5);
+      bg3.addColorStop(0, v.c1 + '88'); bg3.addColorStop(1, 'transparent');
+      targetCtx.fillStyle = bg3; targetCtx.fillRect(0, 0, W, H);
+    }
+
+    if (v.bgStyle === 'stripes') {
+      const gap = W * .08;
+      targetCtx.save();
+      targetCtx.globalAlpha = .12; targetCtx.strokeStyle = '#fff'; targetCtx.lineWidth = gap * .5;
+      for (let x = -H; x < W + H; x += gap) {
+        targetCtx.beginPath(); targetCtx.moveTo(x, 0); targetCtx.lineTo(x + H, H); targetCtx.stroke();
+      }
+      targetCtx.restore();
+    }
+
+    if (v.bgStyle === 'noise') {
+      targetCtx.save();
+      targetCtx.globalAlpha = .6;
+      const pat = targetCtx.createPattern(makeNoise(W, H), 'repeat');
+      targetCtx.fillStyle = pat; targetCtx.fillRect(0, 0, W, H);
+      targetCtx.restore();
+    }
   }
 
-  if (bg) { bg.addColorStop(0, v.c1); bg.addColorStop(1, v.c2); }
-  targetCtx.fillStyle = bg || v.c1;
-  targetCtx.fillRect(0, 0, W, H);
-
-  // Mesh extra layer
-  if (v.bgStyle === 'mesh') {
-    const bg2 = targetCtx.createRadialGradient(W*.8, H*.2, 0, W*.8, H*.2, W*.6);
-    bg2.addColorStop(0, v.c2 + '88');
-    bg2.addColorStop(1, 'transparent');
-    targetCtx.fillStyle = bg2;
-    targetCtx.fillRect(0, 0, W, H);
-    const bg3 = targetCtx.createRadialGradient(W*.2, H*.8, 0, W*.2, H*.8, W*.5);
-    bg3.addColorStop(0, v.c1 + '88');
-    bg3.addColorStop(1, 'transparent');
-    targetCtx.fillStyle = bg3;
-    targetCtx.fillRect(0, 0, W, H);
-  }
-
-  // ─ Soft overlay circles ─
+  // Overlay circles
   targetCtx.save();
   targetCtx.globalAlpha = v.overlayOpacity;
-  [[W*.9, H*.07, W*.14], [W*.1, H*.93, W*.1], [W*-.02, H*.25, W*.18]].forEach(([cx,cy,r]) => {
-    targetCtx.beginPath();
-    targetCtx.arc(cx, cy, r, 0, Math.PI*2);
-    targetCtx.fillStyle = '#fff';
-    targetCtx.fill();
+  [[W*.9, H*.07, W*.14],[W*.1, H*.93, W*.1],[W*-.02, H*.25, W*.18]].forEach(([cx,cy,r]) => {
+    targetCtx.beginPath(); targetCtx.arc(cx, cy, r, 0, Math.PI*2);
+    targetCtx.fillStyle = '#fff'; targetCtx.fill();
   });
   targetCtx.restore();
 
-  // ─ Accent top divider line ─
+  // Accent line
   const lineY = H * (portrait ? .18 : .2);
   targetCtx.save();
-  targetCtx.globalAlpha = .5;
-  targetCtx.strokeStyle = v.aColor;
-  targetCtx.lineWidth = W * .004;
-  targetCtx.lineCap = 'round';
-  targetCtx.beginPath();
-  targetCtx.moveTo(W*.12, lineY);
-  targetCtx.lineTo(W*.88, lineY);
-  targetCtx.stroke();
-  targetCtx.restore();
+  targetCtx.globalAlpha = .5; targetCtx.strokeStyle = v.aColor;
+  targetCtx.lineWidth = W * .004; targetCtx.lineCap = 'round';
+  targetCtx.beginPath(); targetCtx.moveTo(W*.12, lineY); targetCtx.lineTo(W*.88, lineY);
+  targetCtx.stroke(); targetCtx.restore();
 
-  // ─ Platform badge ─
+  // Platform badge
   if (v.showBadge) {
-    const badgeH = H * .038;
-    const badgeW = W * .22;
-    const badgeX = W * .05;
-    const badgeY = H * .05 - badgeH / 2;
+    const bH = H * .038, bW = W * .22, bX = W * .05, bY = H * .05 - bH / 2;
     targetCtx.save();
     targetCtx.fillStyle = 'rgba(255,255,255,.18)';
-    rrect(targetCtx, badgeX, badgeY, badgeW, badgeH, badgeH * .5);
-    targetCtx.fill();
-    targetCtx.font = `600 ${badgeH * .6}px ${v.font}`;
-    targetCtx.fillStyle = v.tColor;
-    targetCtx.globalAlpha = .85;
-    targetCtx.textAlign = 'center';
-    targetCtx.textBaseline = 'middle';
-    targetCtx.fillText(cur.platform, badgeX + badgeW / 2, badgeY + badgeH / 2);
+    rrect(targetCtx, bX, bY, bW, bH, bH * .5); targetCtx.fill();
+    targetCtx.font = `600 ${bH * .6}px ${v.font}`;
+    targetCtx.fillStyle = v.tColor; targetCtx.globalAlpha = .85;
+    targetCtx.textAlign = 'center'; targetCtx.textBaseline = 'middle';
+    targetCtx.fillText(cur.platform, bX + bW / 2, bY + bH / 2);
     targetCtx.restore();
   }
 
-  // ─ Text layout ─
-  const axPct  = v.align === 'center' ? .5 : v.align === 'left' ? .1 : .9;
-  const ax     = W * axPct;
-  const maxTW  = W * .8;
-  const hsFull = v.hSize / 1080 * W;   // headline font size scaled to W
-  const bsFull = hsFull * .38;          // body font
-  const hLineH = hsFull * 1.22;
-  const bLineH = bsFull * 1.4;
-
+  // Text
+  const axPct = v.align === 'center' ? .5 : v.align === 'left' ? .1 : .9;
+  const ax = W * axPct, maxTW = W * .8;
+  const hsFull = v.hSize / 1080 * W, bsFull = hsFull * .38;
+  const hLineH = hsFull * 1.22, bLineH = bsFull * 1.4;
   const headlineTop = portrait ? H * .25 : H * .28;
 
   // Headline
   targetCtx.save();
   targetCtx.font = `700 ${hsFull}px ${v.font}`;
-  targetCtx.fillStyle = v.tColor;
-  targetCtx.textAlign = v.align;
-  targetCtx.textBaseline = 'top';
-  targetCtx.shadowColor = 'rgba(0,0,0,.22)';
-  targetCtx.shadowBlur = hsFull * .12;
-  const headlineLines = wrapLines(targetCtx, v.headline, maxTW);
-  headlineLines.forEach((line, i) => targetCtx.fillText(line, ax, headlineTop + i * hLineH));
+  targetCtx.fillStyle = v.tColor; targetCtx.textAlign = v.align; targetCtx.textBaseline = 'top';
+  if (v.textShadow) { targetCtx.shadowColor = 'rgba(0,0,0,.22)'; targetCtx.shadowBlur = hsFull * .12; }
+  if (v.textOutline) {
+    targetCtx.strokeStyle = luminance(v.tColor) > .5 ? '#000' : '#fff';
+    targetCtx.lineWidth = hsFull * .04; targetCtx.lineJoin = 'round';
+  }
+  const hlLines = wrapLines(targetCtx, v.headline, maxTW);
+  hlLines.forEach((line, i) => {
+    if (v.textOutline) targetCtx.strokeText(line, ax, headlineTop + i * hLineH);
+    targetCtx.fillText(line, ax, headlineTop + i * hLineH);
+  });
   targetCtx.restore();
 
-  const bodyTop = headlineTop + headlineLines.length * hLineH + hsFull * .4;
+  const bodyTop = headlineTop + hlLines.length * hLineH + hsFull * .4;
 
-  // Body text
+  // Body
   if (v.body.trim()) {
     targetCtx.save();
-    targetCtx.font = `${bsFull}px ${v.font}`;
-    targetCtx.fillStyle = v.tColor;
-    targetCtx.globalAlpha = .82;
-    targetCtx.textAlign = v.align;
-    targetCtx.textBaseline = 'top';
-    const bodyLines = wrapLines(targetCtx, v.body, maxTW);
-    bodyLines.forEach((line, i) => targetCtx.fillText(line, ax, bodyTop + i * bLineH));
+    targetCtx.font = `${bsFull}px ${v.font}`; targetCtx.fillStyle = v.tColor;
+    targetCtx.globalAlpha = .82; targetCtx.textAlign = v.align; targetCtx.textBaseline = 'top';
+    if (v.textShadow) { targetCtx.shadowColor = 'rgba(0,0,0,.15)'; targetCtx.shadowBlur = bsFull * .1; }
+    wrapLines(targetCtx, v.body, maxTW).forEach((line, i) => targetCtx.fillText(line, ax, bodyTop + i * bLineH));
     targetCtx.restore();
   }
 
   // CTA button
   if (v.cta.trim()) {
-    const btnH2  = hsFull * .72;
-    const btnPad = hsFull * .55;
+    const btnH2 = hsFull * .72, btnPad = hsFull * .55;
     targetCtx.save();
     targetCtx.font = `700 ${hsFull * .32}px ${v.font}`;
     const btnW2 = targetCtx.measureText(v.cta).width + btnPad * 2;
-    const btnX2 = W / 2 - btnW2 / 2;
-    const btnY2 = portrait ? H * .74 : H * .76;
-    // shadow
-    targetCtx.shadowColor = 'rgba(0,0,0,.28)';
-    targetCtx.shadowBlur = btnH2 * .3;
-    targetCtx.shadowOffsetY = btnH2 * .1;
+    const btnX2 = W / 2 - btnW2 / 2, btnY2 = portrait ? H * .74 : H * .76;
+    targetCtx.shadowColor = 'rgba(0,0,0,.28)'; targetCtx.shadowBlur = btnH2 * .3; targetCtx.shadowOffsetY = btnH2 * .1;
     targetCtx.fillStyle = v.aColor;
-    rrect(targetCtx, btnX2, btnY2 - btnH2/2, btnW2, btnH2, btnH2/2);
-    targetCtx.fill();
-    targetCtx.shadowColor = 'transparent';
-    targetCtx.shadowBlur = 0;
-    targetCtx.shadowOffsetY = 0;
-    // button text — pick contrast colour
-    const btnTextCol = luminance(v.aColor) > .35 ? '#1a1a1a' : '#ffffff';
-    targetCtx.fillStyle = btnTextCol;
-    targetCtx.textAlign = 'center';
-    targetCtx.textBaseline = 'middle';
+    rrect(targetCtx, btnX2, btnY2 - btnH2/2, btnW2, btnH2, btnH2/2); targetCtx.fill();
+    targetCtx.shadowColor = 'transparent'; targetCtx.shadowBlur = 0; targetCtx.shadowOffsetY = 0;
+    targetCtx.fillStyle = luminance(v.aColor) > .35 ? '#1a1a1a' : '#ffffff';
+    targetCtx.textAlign = 'center'; targetCtx.textBaseline = 'middle';
     targetCtx.fillText(v.cta, W/2, btnY2);
     targetCtx.restore();
   }
@@ -545,109 +636,202 @@ function render(targetCtx, tplW, tplH, v) {
   // Handle
   if (v.handle.trim()) {
     targetCtx.save();
-    targetCtx.font = `${W*.021}px ${v.font}`;
-    targetCtx.fillStyle = v.tColor;
-    targetCtx.globalAlpha = .65;
-    targetCtx.textAlign = 'center';
-    targetCtx.textBaseline = 'bottom';
+    targetCtx.font = `${W*.021}px ${v.font}`; targetCtx.fillStyle = v.tColor;
+    targetCtx.globalAlpha = .65; targetCtx.textAlign = 'center'; targetCtx.textBaseline = 'bottom';
     targetCtx.fillText(v.handle, W/2, H - H*.035);
+    targetCtx.restore();
+  }
+
+  // Logo
+  if (logoEl) {
+    const lSize = Math.min(W, H) * v.logoSize, pad = W * .05;
+    const lx = v.logoPos.includes('right') ? W - lSize - pad : pad;
+    const ly = v.logoPos.includes('bottom') ? H - lSize - pad : pad;
+    const aspect = logoEl.width / logoEl.height;
+    const lw = aspect >= 1 ? lSize : lSize * aspect;
+    const lh = aspect >= 1 ? lSize / aspect : lSize;
+    targetCtx.save(); targetCtx.globalAlpha = .92;
+    targetCtx.drawImage(logoEl, lx, ly, lw, lh);
+    targetCtx.restore();
+  }
+
+  // Emoji sticker
+  if (selectedEmoji && v.emojiPos !== 'none') {
+    const eSize = W * .12, pad = W * .06;
+    let ex, ey;
+    switch(v.emojiPos) {
+      case 'top-left':     ex = pad; ey = pad; break;
+      case 'top-right':    ex = W - pad - eSize; ey = pad; break;
+      case 'center':       ex = W/2 - eSize/2; ey = H/2 - eSize/2; break;
+      case 'bottom-left':  ex = pad; ey = H - pad - eSize; break;
+      default:             ex = W - pad - eSize; ey = H - pad - eSize;
+    }
+    targetCtx.save();
+    targetCtx.font = `${eSize}px serif`; targetCtx.textAlign = 'left'; targetCtx.textBaseline = 'top';
+    targetCtx.fillText(selectedEmoji, ex, ey);
     targetCtx.restore();
   }
 }
 
-// ── Rounded rect helper ────────────────────────────────────────
 function rrect(c, x, y, w, h, r) {
   c.beginPath();
-  c.moveTo(x+r, y);
-  c.lineTo(x+w-r, y);
-  c.arcTo(x+w, y, x+w, y+r, r);
-  c.lineTo(x+w, y+h-r);
-  c.arcTo(x+w, y+h, x+w-r, y+h, r);
-  c.lineTo(x+r, y+h);
-  c.arcTo(x, y+h, x, y+h-r, r);
-  c.lineTo(x, y+r);
-  c.arcTo(x, y, x+r, y, r);
+  c.moveTo(x+r,y); c.lineTo(x+w-r,y); c.arcTo(x+w,y,x+w,y+r,r);
+  c.lineTo(x+w,y+h-r); c.arcTo(x+w,y+h,x+w-r,y+h,r);
+  c.lineTo(x+r,y+h); c.arcTo(x,y+h,x,y+h-r,r);
+  c.lineTo(x,y+r); c.arcTo(x,y,x+r,y,r);
   c.closePath();
 }
 
-// ── Word-wrap helper ───────────────────────────────────────────
 function wrapLines(ctx2, text, maxWidth) {
-  const words = text.split(' ');
-  const lines = [];
-  let cur2 = '';
+  const words = text.split(' '), lines = []; let cur2 = '';
   for (const word of words) {
     const test = cur2 ? cur2 + ' ' + word : word;
-    if (ctx2.measureText(test).width > maxWidth && cur2) {
-      lines.push(cur2);
-      cur2 = word;
-    } else {
-      cur2 = test;
-    }
+    if (ctx2.measureText(test).width > maxWidth && cur2) { lines.push(cur2); cur2 = word; }
+    else cur2 = test;
   }
   if (cur2) lines.push(cur2);
   return lines.length ? lines : [''];
 }
 
-// ── Luminance for contrast ─────────────────────────────────────
 function luminance(hex) {
-  const r = parseInt(hex.slice(1,3),16)/255;
-  const g = parseInt(hex.slice(3,5),16)/255;
-  const b = parseInt(hex.slice(5,7),16)/255;
-  const toLinear = c => c <= .04045 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4);
-  return .2126*toLinear(r) + .7152*toLinear(g) + .0722*toLinear(b);
+  const r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255;
+  const l = c => c <= .04045 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4);
+  return .2126*l(r) + .7152*l(g) + .0722*l(b);
 }
 
-// ── Preview draw ───────────────────────────────────────────────
 function draw() {
-  const v = vals();
-  // Scale native template into preview canvas
-  const scX = cvs.width  / cur.w;
-  const scY = cvs.height / cur.h;
-  ctx.save();
-  ctx.scale(scX, scY);
+  const v = vals(), scX = cvs.width/cur.w, scY = cvs.height/cur.h;
+  ctx.save(); ctx.scale(scX, scY);
   render(ctx, cur.w, cur.h, v);
   ctx.restore();
 }
 
-// ── Download (full native resolution) ─────────────────────────
+function renderOffscreen() {
+  const oc = document.createElement('canvas');
+  oc.width = cur.w; oc.height = cur.h;
+  render(oc.getContext('2d'), cur.w, cur.h, vals());
+  return oc;
+}
+
+// Download
 document.getElementById('dlBtn').addEventListener('click', () => {
-  const offCvs = document.createElement('canvas');
-  offCvs.width  = cur.w;
-  offCvs.height = cur.h;
-  const offCtx = offCvs.getContext('2d');
-  render(offCtx, cur.w, cur.h, vals());
-  offCvs.toBlob(blob => {
+  const oc = renderOffscreen();
+  const mime = exportFmt === 'jpeg' ? 'image/jpeg' : 'image/png';
+  const ext  = exportFmt === 'jpeg' ? 'jpg' : 'png';
+  oc.toBlob(blob => {
     const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href     = url;
-    a.download = `social_${cur.id}_${Date.now()}.png`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, 'image/png');
+    const a = document.createElement('a');
+    a.href = url; a.download = `social_${cur.id}_${Date.now()}.${ext}`;
+    a.click(); URL.revokeObjectURL(url);
+  }, mime, exportFmt === 'jpeg' ? 0.92 : undefined);
 });
 
-// ── Copy style JSON ────────────────────────────────────────────
+// Copy image
+document.getElementById('copyImgBtn').addEventListener('click', async () => {
+  try {
+    const oc = renderOffscreen();
+    oc.toBlob(async blob => {
+      await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+      const btn = document.getElementById('copyImgBtn');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 1600);
+    }, 'image/png');
+  } catch { alert('Clipboard write not supported in this browser.'); }
+});
+
+// Share
+const shareBtn = document.getElementById('shareBtn');
+if (navigator.share) {
+  shareBtn.style.display = 'flex';
+  shareBtn.addEventListener('click', () => {
+    renderOffscreen().toBlob(async blob => {
+      const file = new File([blob], `social_${cur.id}.png`, { type: 'image/png' });
+      try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'Social Template Studio' });
+        } else {
+          await navigator.share({ title: 'Social Template Studio', url: location.href });
+        }
+      } catch {}
+    }, 'image/png');
+  });
+}
+
+// Copy JSON
 document.getElementById('copyBtn').addEventListener('click', () => {
   const v = vals();
   const payload = JSON.stringify({ background:[v.c1,v.c2], bgStyle:v.bgStyle, font:v.font, headlineSize:v.hSize, textColor:v.tColor, accentColor:v.aColor, align:v.align }, null, 2);
   navigator.clipboard.writeText(payload).then(() => {
     const btn = document.getElementById('copyBtn');
-    const orig = btn.textContent;
-    btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = orig; }, 1600);
+    const orig = btn.textContent; btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = orig, 1600);
   });
 });
 
-// ── Mobile tab switching ───────────────────────────────────────
+// Save / Load
+function saveDesign() {
+  try {
+    localStorage.setItem('socialStudio_v2', JSON.stringify({
+      ...vals(), templateId: cur.id, exportFmt, selectedEmoji, bgImageData, logoData
+    }));
+  } catch {}
+}
+
+function loadDesign() {
+  try {
+    const s = JSON.parse(localStorage.getItem('socialStudio_v2') || 'null');
+    if (!s) return;
+    const tpl = TEMPLATES.find(t => t.id === s.templateId);
+    if (tpl) {
+      cur = tpl;
+      document.querySelectorAll('.tpl-card').forEach((c, i) => c.classList.toggle('active', TEMPLATES[i].id === tpl.id));
+    }
+    const set = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.value = v; };
+    const chk = (id, v) => { const el = document.getElementById(id); if (el && v != null) el.checked = v; };
+    set('headline', s.headline); set('body', s.body); set('handle', s.handle); set('cta', s.cta);
+    set('bgStyle', s.bgStyle); set('c1', s.c1); set('c2', s.c2); set('font', s.font);
+    set('hSize', s.hSize); set('hSlider', s.hSize);
+    set('tColor', s.tColor); set('aColor', s.aColor); set('align', s.align);
+    set('overlayOpacity', Math.round((s.overlayOpacity || .15) * 100));
+    chk('showBadge', s.showBadge !== false);
+    chk('textShadow', s.textShadow !== false);
+    chk('textOutline', !!s.textOutline);
+    set('logoPos', s.logoPos); set('logoSize', Math.round((s.logoSize || .2) * 100));
+    set('emojiPos', s.emojiPos || 'none');
+    if (s.exportFmt) {
+      exportFmt = s.exportFmt;
+      document.querySelectorAll('.fmt-btn').forEach(b => b.classList.toggle('active', b.dataset.fmt === exportFmt));
+    }
+    if (s.selectedEmoji) {
+      selectedEmoji = s.selectedEmoji;
+      document.querySelectorAll('.emoji-btn').forEach(b => b.classList.toggle('active', b.textContent === selectedEmoji));
+    }
+    if (s.bgImageData) {
+      bgImageData = s.bgImageData; bgImageEl = new Image();
+      bgImageEl.onload = draw; bgImageEl.src = bgImageData;
+      document.getElementById('bgPreview').src = bgImageData;
+      document.getElementById('bgPreview').classList.add('show');
+      document.getElementById('bgClear').classList.add('show');
+    }
+    if (s.logoData) {
+      logoData = s.logoData; logoEl = new Image();
+      logoEl.onload = draw; logoEl.src = logoData;
+      document.getElementById('logoPreview').src = logoData;
+      document.getElementById('logoPreview').classList.add('show');
+      document.getElementById('logoClear').classList.add('show');
+    }
+  } catch {}
+}
+
+// Mobile tabs
 function isMobile() { return window.innerWidth < 768; }
 
 function applyActiveTab(panelId) {
-  ['tpl-bar', 'canvas-area', 'edit-panel'].forEach(id => {
+  ['tpl-bar','canvas-area','edit-panel'].forEach(id => {
     document.querySelector(`.${id}`).classList.toggle('tab-active', id === panelId);
   });
-  document.querySelectorAll('.mobile-tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.panel === panelId);
-  });
+  document.querySelectorAll('.mobile-tab').forEach(btn => btn.classList.toggle('active', btn.dataset.panel === panelId));
   if (panelId === 'canvas-area') { resizeCvs(); draw(); }
 }
 
@@ -655,9 +839,7 @@ function initMobileLayout() {
   if (isMobile()) {
     applyActiveTab('tpl-bar');
   } else {
-    ['tpl-bar', 'canvas-area', 'edit-panel'].forEach(id => {
-      document.querySelector(`.${id}`).classList.remove('tab-active');
-    });
+    ['tpl-bar','canvas-area','edit-panel'].forEach(id => document.querySelector(`.${id}`).classList.remove('tab-active'));
   }
 }
 
@@ -666,15 +848,19 @@ document.getElementById('mobileTabs').addEventListener('click', e => {
   if (tab && isMobile()) applyActiveTab(tab.dataset.panel);
 });
 
-// ── Init ───────────────────────────────────────────────────────
+// Init
+loadDesign();
 initMobileLayout();
 resizeCvs();
 draw();
+setTimeout(() => {
+  const sp = document.getElementById('splash');
+  sp.classList.add('hidden');
+  setTimeout(() => sp.remove(), 450);
+}, 700);
 window.addEventListener('resize', () => { initMobileLayout(); resizeCvs(); draw(); });
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js');
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
 </html>

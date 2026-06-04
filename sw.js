@@ -1,4 +1,4 @@
-const CACHE = 'social-studio-v1';
+const CACHE = 'social-studio-v2';
 const ASSETS = [
   '/Social-Template-/',
   '/Social-Template-/index.html',
