@@ -250,6 +250,10 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
       <div class="fg"><label>Overlay Opacity (%)</label>
         <input type="range" id="overlayOpacity" min="0" max="60" value="15">
       </div>
+      <div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <input type="checkbox" id="showBadge" checked style="width:16px;height:16px;accent-color:var(--l500);cursor:pointer;flex-shrink:0;">
+        <label for="showBadge" style="margin:0;cursor:pointer;">Show platform label on image</label>
+      </div>
     </div>
 
     <div class="ep-section">
@@ -312,7 +316,11 @@ TEMPLATES.forEach(t => {
     <div class="tpl-label">${t.label}</div>
     <div class="tpl-dims">${t.w}&times;${t.h}</div>`;
   card.querySelector('.tpl-thumb').style.position = 'relative';
+  let touchMoved = false;
+  card.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
+  card.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
   card.addEventListener('click', () => {
+    if (touchMoved) return;
     document.querySelectorAll('.tpl-card').forEach(c => c.classList.remove('active'));
     card.classList.add('active');
     cur = t;
@@ -346,7 +354,7 @@ hSize.addEventListener('input', () => { hSlider.value = hSize.value; draw(); });
 hSlider.addEventListener('input', () => { hSize.value = hSlider.value; draw(); });
 
 // ── Wire all inputs ────────────────────────────────────────────
-['headline','body','handle','cta','bgStyle','c1','c2','font','tColor','aColor','align','overlayOpacity']
+['headline','body','handle','cta','bgStyle','c1','c2','font','tColor','aColor','align','overlayOpacity','showBadge']
   .forEach(id => {
     const el = document.getElementById(id);
     el.addEventListener('input', draw);
@@ -379,6 +387,7 @@ function vals() {
     aColor:   document.getElementById('aColor').value,
     align:    document.getElementById('align').value,
     overlayOpacity: parseInt(document.getElementById('overlayOpacity').value) / 100,
+    showBadge: document.getElementById('showBadge').checked,
   };
 }
 
@@ -444,21 +453,23 @@ function render(targetCtx, tplW, tplH, v) {
   targetCtx.restore();
 
   // ─ Platform badge ─
-  const badgeH = H * .038;
-  const badgeW = W * .22;
-  const badgeX = W * .05;
-  const badgeY = H * .05 - badgeH / 2;
-  targetCtx.save();
-  targetCtx.fillStyle = 'rgba(255,255,255,.18)';
-  rrect(targetCtx, badgeX, badgeY, badgeW, badgeH, badgeH * .5);
-  targetCtx.fill();
-  targetCtx.font = `600 ${badgeH * .6}px ${v.font}`;
-  targetCtx.fillStyle = v.tColor;
-  targetCtx.globalAlpha = .85;
-  targetCtx.textAlign = 'center';
-  targetCtx.textBaseline = 'middle';
-  targetCtx.fillText(cur.platform, badgeX + badgeW / 2, badgeY + badgeH / 2);
-  targetCtx.restore();
+  if (v.showBadge) {
+    const badgeH = H * .038;
+    const badgeW = W * .22;
+    const badgeX = W * .05;
+    const badgeY = H * .05 - badgeH / 2;
+    targetCtx.save();
+    targetCtx.fillStyle = 'rgba(255,255,255,.18)';
+    rrect(targetCtx, badgeX, badgeY, badgeW, badgeH, badgeH * .5);
+    targetCtx.fill();
+    targetCtx.font = `600 ${badgeH * .6}px ${v.font}`;
+    targetCtx.fillStyle = v.tColor;
+    targetCtx.globalAlpha = .85;
+    targetCtx.textAlign = 'center';
+    targetCtx.textBaseline = 'middle';
+    targetCtx.fillText(cur.platform, badgeX + badgeW / 2, badgeY + badgeH / 2);
+    targetCtx.restore();
+  }
 
   // ─ Text layout ─
   const axPct  = v.align === 'center' ? .5 : v.align === 'left' ? .1 : .9;
