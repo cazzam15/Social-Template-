@@ -112,6 +112,17 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
 .fmt-btn { flex: 1; padding: 7px; border: 1.5px solid var(--l300); border-radius: 8px; font-size: .78rem; font-weight: 600; cursor: pointer; background: var(--l50); color: var(--mid); transition: all .18s; font-family: inherit; }
 .fmt-btn.active { background: var(--l600); color: #fff; border-color: var(--l600); }
 
+/* Stars */
+.stars { display: flex; gap: 6px; margin-top: 6px; align-items: center; }
+.star-btn { font-size: 1.35rem; background: none; border: none; cursor: pointer; padding: 2px; transition: transform .12s; color: var(--l200); }
+.star-btn.filled { color: #FFD700; }
+.star-btn:hover { transform: scale(1.2); }
+.stars-clear { font-size: .7rem; color: var(--l600); cursor: pointer; margin-left: 6px; background: none; border: none; padding: 0; }
+
+/* Book cover preview */
+.bk-cover { width: 100%; max-height: 140px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--l200); margin-top: 4px; display: none; }
+.bk-cover.show { display: block; }
+
 /* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--l300); border-radius: 10px; }
@@ -145,7 +156,7 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
 
 <header>
   <h1>&#10024; Social Template Studio</h1>
-  <span>Pick a format &rarr; edit &rarr; download</span>
+  <span>Pick a format &rarr; edit &rarr; download or resize cover</span>
 </header>
 
 <div class="app">
@@ -153,6 +164,9 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
   <div class="tpl-bar">
     <div class="bar-heading">Format</div>
     <div class="tpl-grid" id="tplGrid"></div>
+
+    <div class="bar-heading" style="margin-top:18px">Covers</div>
+    <div class="tpl-grid" id="bkGrid"></div>
   </div>
 
   <div class="canvas-area">
@@ -163,10 +177,10 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
 
     <div class="ep-section">
       <div class="ep-title">Content</div>
-      <div class="fg"><label>Headline</label><input type="text" id="headline" value="Your Amazing Headline"></div>
-      <div class="fg"><label>Body / Caption</label><textarea id="body">Add your description or call to action here.</textarea></div>
-      <div class="fg"><label>Handle / Tag</label><input type="text" id="handle" value="@yourbrand"></div>
-      <div class="fg"><label>Button Text</label><input type="text" id="cta" value="Learn More"></div>
+      <div class="fg"><label>Headline</label><input type="text" id="headline" value="Your Book Is Here"></div>
+      <div class="fg"><label>Tagline / Quote</label><textarea id="body">A line readers will remember.</textarea></div>
+      <div class="fg"><label>Handle / Tag</label><input type="text" id="handle" value="@YourBook"></div>
+      <div class="fg"><label>Button Text</label><input type="text" id="cta" value="Buy Now"></div>
       <div class="fg">
         <label>Emoji Sticker</label>
         <div class="emoji-grid" id="emojiGrid"></div>
@@ -180,6 +194,11 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
             <option value="bottom-right">Bottom Right</option>
           </select>
         </div>
+      </div>
+      <div class="fg">
+        <label>Rating</label>
+        <div class="stars" id="stars"></div>
+        <button type="button" class="stars-clear" id="starsClear">Clear</button>
       </div>
     </div>
 
@@ -197,8 +216,8 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
         </select>
       </div>
       <div class="fg"><label>Presets</label><div class="presets" id="presets"></div></div>
-      <div class="row-color"><label>Color A</label><input type="color" id="c1" value="#C483D8"></div>
-      <div class="row-color"><label>Color B</label><input type="color" id="c2" value="#9040A8"></div>
+      <div class="row-color"><label>Color A</label><input type="color" id="c1" value="#2D1B4E"></div>
+      <div class="row-color"><label>Color B</label><input type="color" id="c2" value="#0D0D2B"></div>
       <div class="fg">
         <label>Background Photo</label>
         <label class="btn-upload" for="bgImageInput">&#128247; Upload Image</label>
@@ -206,6 +225,28 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
         <img id="bgPreview" class="img-preview" alt="">
         <div id="bgClear" class="img-clear">&#10005; Remove image</div>
       </div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-title">Book Cover / Asset</div>
+      <div class="fg">
+        <label class="btn-upload" for="bkCoverInput">&#128247; Upload Cover</label>
+        <input type="file" id="bkCoverInput" accept="image/*" style="display:none">
+        <img id="bkCover" class="bk-cover" alt="Cover">
+        <div id="bkCoverClear" class="img-clear">&#10005; Remove cover</div>
+      </div>
+      <div class="fg"><label>Position</label>
+        <select id="bkPos">
+          <option value="center">Center</option>
+          <option value="top-left">Top Left</option>
+          <option value="top-right">Top Right</option>
+          <option value="bottom-left">Bottom Left</option>
+          <option value="bottom-right">Bottom Right</option>
+        </select>
+      </div>
+      <div class="fg"><label>Scale (%)</label><input type="range" id="bkScale" min="10" max="70" value="40"></div>
+      <div class="toggle-row"><input type="checkbox" id="bkRotate"><label for="bkRotate">Show cover rotated</label></div>
+      <div class="toggle-row"><input type="checkbox" id="bkShadow" checked><label for="bkShadow">Drop shadow</label></div>
     </div>
 
     <div class="ep-section">
@@ -237,12 +278,20 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
           <option value="Impact,sans-serif">Impact</option>
           <option value="'Palatino Linotype',serif">Palatino</option>
           <option value="'Courier New',monospace">Courier New</option>
+          <option value="'Times New Roman',serif">Times New Roman</option>
+          <option value="Verdana,sans-serif">Verdana</option>
         </select>
       </div>
       <div class="fg"><label>Headline Size</label>
         <div class="size-row">
           <input type="number" id="hSize" value="68" min="18" max="220">
           <div class="sl"><input type="range" id="hSlider" min="18" max="220" value="68"></div>
+        </div>
+      </div>
+      <div class="fg"><label>Tagline Size</label>
+        <div class="size-row">
+          <input type="number" id="bSize" value="72" min="18" max="180">
+          <div class="sl"><input type="range" id="bSlider" min="18" max="180" value="72"></div>
         </div>
       </div>
       <div class="row-color"><label>Text Color</label><input type="color" id="tColor" value="#FFFFFF"></div>
@@ -276,6 +325,7 @@ input[type=range] { width: 100%; accent-color: var(--l500); }
       <button class="btn btn-sec" id="copyImgBtn">&#128203; Copy Image</button>
       <button class="btn btn-share" id="shareBtn" style="display:none">&#8679; Share</button>
       <button class="btn btn-sec" id="copyBtn">&#9998; Copy Style (JSON)</button>
+      <button class="btn btn-sec" id="bkCoverTopBtn" style="margin-top:4px">&#128214; Use book cover as background</button>
     </div>
 
   </div>
@@ -302,8 +352,8 @@ const TEMPLATES = [
 const PRESETS = [
   ['#C483D8','#9040A8'],['#FF6B9D','#C044A8'],['#4158D0','#C850C0'],
   ['#0093E9','#80D0C7'],['#FF9A9E','#FECFEF'],['#A18CD1','#FBC2EB'],
-  ['#E8D5F0','#B070C0'],['#2D1B4E','#0D0D2B'],['#F8C8C8','#E870A0'],
-  ['#FFD700','#FF8C00'],
+  ['#E8D5F0','#B070C0'],['#2D1B4E','#0D0D2B'],['#1F3B4D','#BDD8E6'],
+  ['#3C1642','#082032'],['#F8C8C8','#E870A0'],['#FFD700','#FF8C00'],
 ];
 
 const EMOJIS = ['🔥','⭐','💥','🎯','🚀','💫','✨','🌟','💎','🎉','❤️','👑'];
@@ -311,8 +361,10 @@ const EMOJIS = ['🔥','⭐','💥','🎯','🚀','💫','✨','🌟','💎','�
 let cur = TEMPLATES[0];
 let exportFmt = 'png';
 let bgImageEl = null, bgImageData = '';
+let bkCoverEl = null, bkCoverData = '';
 let logoEl = null, logoData = '';
 let selectedEmoji = '';
+let rating = 0;
 
 const cvs = document.getElementById('cvs');
 const ctx = cvs.getContext('2d');
@@ -376,11 +428,36 @@ EMOJIS.forEach(em => {
   emojiGrid.appendChild(btn);
 });
 
+// Stars
+const starsEl = document.getElementById('stars');
+const starValues = [1,2,3,4,5];
+starValues.forEach(n => {
+  const btn = document.createElement('button');
+  btn.className = 'star-btn';
+  btn.textContent = '★';
+  btn.dataset.value = String(n);
+  btn.addEventListener('click', () => {
+    rating = rating === n ? Math.max(0, n - 1) : n;
+    updateStars();
+    draw(); saveDesign();
+  });
+  starsEl.appendChild(btn);
+});
+function updateStars() {
+  document.querySelectorAll('.star-btn').forEach(btn => btn.classList.toggle('filled', Number(btn.dataset.value) <= rating));
+}
+document.getElementById('starsClear').addEventListener('click', () => { rating = 0; updateStars(); draw(); saveDesign(); });
+
 // Slider sync
 const hSize = document.getElementById('hSize');
 const hSlider = document.getElementById('hSlider');
 hSize.addEventListener('input', () => { hSlider.value = hSize.value; draw(); saveDesign(); });
 hSlider.addEventListener('input', () => { hSize.value = hSlider.value; draw(); saveDesign(); });
+
+const bSize = document.getElementById('bSize');
+const bSlider = document.getElementById('bSlider');
+bSize.addEventListener('input', () => { bSlider.value = bSize.value; draw(); saveDesign(); });
+bSlider.addEventListener('input', () => { bSize.value = bSlider.value; draw(); saveDesign(); });
 
 // Format buttons
 document.querySelectorAll('.fmt-btn').forEach(btn => {
@@ -394,8 +471,8 @@ document.querySelectorAll('.fmt-btn').forEach(btn => {
 
 // Wire inputs
 ['headline','body','handle','cta','bgStyle','c1','c2','font','tColor','aColor','align',
- 'overlayOpacity','showBadge','textShadow','textOutline','logoPos','logoSize','emojiPos']
-.forEach(id => {
+ 'overlayOpacity','showBadge','textShadow','textOutline','logoPos','logoSize','emojiPos',
+ 'bkPos','bkScale','bkRotate','bkShadow'].forEach(id => {
   const el = document.getElementById(id);
   el.addEventListener('input', () => { draw(); saveDesign(); });
   el.addEventListener('change', () => { draw(); saveDesign(); });
@@ -423,6 +500,41 @@ document.getElementById('bgClear').addEventListener('click', () => {
   document.getElementById('bgClear').classList.remove('show');
   document.getElementById('bgImageInput').value = '';
   document.getElementById('bgStyle').value = 'gradient';
+  draw(); saveDesign();
+});
+
+// Book cover
+document.getElementById('bkCoverInput').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    bkCoverData = ev.target.result;
+    bkCoverEl = new Image();
+    bkCoverEl.onload = () => { draw(); saveDesign(); };
+    bkCoverEl.src = bkCoverData;
+    document.getElementById('bkCover').src = bkCoverData;
+    document.getElementById('bkCover').classList.add('show');
+    document.getElementById('bkCoverClear').classList.add('show');
+  };
+  reader.readAsDataURL(file);
+});
+document.getElementById('bkCoverClear').addEventListener('click', () => {
+  bkCoverEl = null; bkCoverData = '';
+  document.getElementById('bkCover').classList.remove('show');
+  document.getElementById('bkCoverClear').classList.remove('show');
+  document.getElementById('bkCoverInput').value = '';
+  draw(); saveDesign();
+});
+
+// Use cover as background
+document.getElementById('bkCoverTopBtn').addEventListener('click', () => {
+  if (!bkCoverEl) { alert('Upload a cover first.'); return; }
+  bgImageData = bkCoverData;
+  bgImageEl = bkCoverEl;
+  document.getElementById('bgPreview').src = bkCoverData;
+  document.getElementById('bgPreview').classList.add('show');
+  document.getElementById('bgClear').classList.add('show');
+  document.getElementById('bgStyle').value = 'image';
   draw(); saveDesign();
 });
 
@@ -471,6 +583,7 @@ function vals() {
     c2:       document.getElementById('c2').value,
     font:     document.getElementById('font').value,
     hSize:    parseInt(hSize.value) || 68,
+    bSize:    parseInt(bSize.value) || 72,
     tColor:   document.getElementById('tColor').value,
     aColor:   document.getElementById('aColor').value,
     align:    document.getElementById('align').value,
@@ -481,6 +594,11 @@ function vals() {
     logoPos:  document.getElementById('logoPos').value,
     logoSize: parseInt(document.getElementById('logoSize').value) / 100,
     emojiPos: document.getElementById('emojiPos').value,
+    bkPos:    document.getElementById('bkPos').value,
+    bkScale:  parseInt(document.getElementById('bkScale').value) / 100,
+    bkRotate: document.getElementById('bkRotate').checked,
+    bkShadow: document.getElementById('bkShadow').checked,
+    rating,
   };
 }
 
@@ -496,6 +614,21 @@ function makeNoise(W, H) {
   }
   nctx.putImageData(id, 0, 0);
   return nc;
+}
+
+function drawStarField(targetCtx, W, H) {
+  const count = Math.floor(W * H / 18000);
+  targetCtx.save();
+  targetCtx.fillStyle = 'rgba(255,255,255,.55)';
+  for (let i = 0; i < count; i++) {
+    const sx = Math.random() * W;
+    const sy = Math.random() * H * 0.55;
+    const r = Math.random() * 1.1 + 0.3;
+    targetCtx.beginPath();
+    targetCtx.arc(sx, sy, r, 0, Math.PI * 2);
+    targetCtx.fill();
+  }
+  targetCtx.restore();
 }
 
 // Render
@@ -549,14 +682,15 @@ function render(targetCtx, tplW, tplH, v) {
       targetCtx.fillStyle = pat; targetCtx.fillRect(0, 0, W, H);
       targetCtx.restore();
     }
+
+    drawStarField(targetCtx, W, H);
   }
 
   // Overlay circles
   targetCtx.save();
   targetCtx.globalAlpha = v.overlayOpacity;
   [[W*.9, H*.07, W*.14],[W*.1, H*.93, W*.1],[W*-.02, H*.25, W*.18]].forEach(([cx,cy,r]) => {
-    targetCtx.beginPath(); targetCtx.arc(cx, cy, r, 0, Math.PI*2);
-    targetCtx.fillStyle = '#fff'; targetCtx.fill();
+    targetCtx.beginPath(); targetCtx.arc(cx, cy, r, 0, Math.PI*2); targetCtx.fillStyle = '#fff'; targetCtx.fill();
   });
   targetCtx.restore();
 
@@ -565,8 +699,7 @@ function render(targetCtx, tplW, tplH, v) {
   targetCtx.save();
   targetCtx.globalAlpha = .5; targetCtx.strokeStyle = v.aColor;
   targetCtx.lineWidth = W * .004; targetCtx.lineCap = 'round';
-  targetCtx.beginPath(); targetCtx.moveTo(W*.12, lineY); targetCtx.lineTo(W*.88, lineY);
-  targetCtx.stroke(); targetCtx.restore();
+  targetCtx.beginPath(); targetCtx.moveTo(W*.12, lineY); targetCtx.lineTo(W*.88, lineY); targetCtx.stroke(); targetCtx.restore();
 
   // Platform badge
   if (v.showBadge) {
@@ -581,12 +714,48 @@ function render(targetCtx, tplW, tplH, v) {
     targetCtx.restore();
   }
 
+  // Book cover
+  if (bkCoverEl) {
+    const pad = W * .07;
+    const maxCoverSize = Math.min(W, H) * v.bkScale;
+    const baseAspect = bkCoverEl.width / bkCoverEl.height;
+    const cw = Math.min(maxCoverSize, W - pad * 2);
+    const ch = baseAspect ? Math.max(cw / baseAspect, 1) : cw;
+    const cx = v.bkPos.includes('right') ? W - pad - cw : (v.bkPos.includes('left') ? pad : W / 2 - cw / 2);
+    const cy = v.bkPos.includes('bottom') ? H - pad - ch : (v.bkPos.includes('top') ? pad : H / 2 - ch / 2);
+    targetCtx.save();
+    if (v.bkRotate) {
+      targetCtx.translate(cx + cw / 2, cy + ch / 2);
+      targetCtx.rotate(-0.18);
+      targetCtx.translate(-(cx + cw / 2), -(cy + ch / 2));
+    }
+    if (v.bkShadow) {
+      targetCtx.shadowColor = 'rgba(0,0,0,.55)';
+      targetCtx.shadowBlur = ch * .14;
+      targetCtx.shadowOffsetX = ch * .08;
+      targetCtx.shadowOffsetY = ch * .12;
+    }
+    targetCtx.drawImage(bkCoverEl, cx, cy, cw, ch);
+    targetCtx.restore();
+  }
+
   // Text
   const axPct = v.align === 'center' ? .5 : v.align === 'left' ? .1 : .9;
-  const ax = W * axPct, maxTW = W * .8;
-  const hsFull = v.hSize / 1080 * W, bsFull = hsFull * .38;
+  const ax = W * axPct, maxTW = W * .78;
+  const hsFull = v.hSize / 1080 * W, bsFull = v.bSize / 1080 * W;
   const hLineH = hsFull * 1.22, bLineH = bsFull * 1.4;
   const headlineTop = portrait ? H * .25 : H * .28;
+
+  // Stars
+  if (rating) {
+    targetCtx.save();
+    targetCtx.font = `700 ${hsFull * .45}px ${v.font}`;
+    targetCtx.fillStyle = '#FFD700';
+    targetCtx.globalAlpha = .92;
+    targetCtx.textAlign = 'center'; targetCtx.textBaseline = 'top';
+    targetCtx.fillText('★'.repeat(rating), W / 2, portrait ? H * .14 : H * .16);
+    targetCtx.restore();
+  }
 
   // Headline
   targetCtx.save();
@@ -761,7 +930,7 @@ if (navigator.share) {
 // Copy JSON
 document.getElementById('copyBtn').addEventListener('click', () => {
   const v = vals();
-  const payload = JSON.stringify({ background:[v.c1,v.c2], bgStyle:v.bgStyle, font:v.font, headlineSize:v.hSize, textColor:v.tColor, accentColor:v.aColor, align:v.align }, null, 2);
+  const payload = JSON.stringify({ background:[v.c1,v.c2], bgStyle:v.bgStyle, font:v.font, headlineSize:v.hSize, taglineSize:v.bSize, textColor:v.tColor, accentColor:v.aColor, align:v.align }, null, 2);
   navigator.clipboard.writeText(payload).then(() => {
     const btn = document.getElementById('copyBtn');
     const orig = btn.textContent; btn.textContent = 'Copied!';
@@ -772,15 +941,15 @@ document.getElementById('copyBtn').addEventListener('click', () => {
 // Save / Load
 function saveDesign() {
   try {
-    localStorage.setItem('socialStudio_v2', JSON.stringify({
-      ...vals(), templateId: cur.id, exportFmt, selectedEmoji, bgImageData, logoData
+    localStorage.setItem('socialStudio_v3', JSON.stringify({
+      ...vals(), templateId: cur.id, exportFmt, selectedEmoji, bgImageData, bkCoverData, logoData, rating
     }));
   } catch {}
 }
 
 function loadDesign() {
   try {
-    const s = JSON.parse(localStorage.getItem('socialStudio_v2') || 'null');
+    const s = JSON.parse(localStorage.getItem('socialStudio_v3') || 'null');
     if (!s) return;
     const tpl = TEMPLATES.find(t => t.id === s.templateId);
     if (tpl) {
@@ -792,6 +961,7 @@ function loadDesign() {
     set('headline', s.headline); set('body', s.body); set('handle', s.handle); set('cta', s.cta);
     set('bgStyle', s.bgStyle); set('c1', s.c1); set('c2', s.c2); set('font', s.font);
     set('hSize', s.hSize); set('hSlider', s.hSize);
+    set('bSize', s.bSize); set('bSlider', s.bSize);
     set('tColor', s.tColor); set('aColor', s.aColor); set('align', s.align);
     set('overlayOpacity', Math.round((s.overlayOpacity || .15) * 100));
     chk('showBadge', s.showBadge !== false);
@@ -799,6 +969,12 @@ function loadDesign() {
     chk('textOutline', !!s.textOutline);
     set('logoPos', s.logoPos); set('logoSize', Math.round((s.logoSize || .2) * 100));
     set('emojiPos', s.emojiPos || 'none');
+    set('bkPos', s.bkPos || 'center');
+    set('bkScale', Math.round((s.bkScale || .4) * 100));
+    chk('bkRotate', !!s.bkRotate);
+    chk('bkShadow', s.bkShadow !== false);
+    if (typeof s.rating === 'number') { rating = Math.min(5, Math.max(0, Math.round(s.rating))); }
+    updateStars();
     if (s.exportFmt) {
       exportFmt = s.exportFmt;
       document.querySelectorAll('.fmt-btn').forEach(b => b.classList.toggle('active', b.dataset.fmt === exportFmt));
@@ -813,6 +989,13 @@ function loadDesign() {
       document.getElementById('bgPreview').src = bgImageData;
       document.getElementById('bgPreview').classList.add('show');
       document.getElementById('bgClear').classList.add('show');
+    }
+    if (s.bkCoverData) {
+      bkCoverData = s.bkCoverData; bkCoverEl = new Image();
+      bkCoverEl.onload = draw; bkCoverEl.src = bkCoverData;
+      document.getElementById('bkCover').src = bkCoverData;
+      document.getElementById('bkCover').classList.add('show');
+      document.getElementById('bkCoverClear').classList.add('show');
     }
     if (s.logoData) {
       logoData = s.logoData; logoEl = new Image();
